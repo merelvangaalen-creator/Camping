@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paklijst camping</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f5f0e8; font-family: 'Source Sans 3', sans-serif; min-height: 100vh; padding-bottom: 80px; }
+
+.app-wrap { max-width: 480px; margin: 0 auto; }
+
+.header { background: #2d3b2d; color: #e8dfc8; padding: 28px 24px 20px; position: sticky; top: 0; z-index: 10; }
+.header h1 { font-family: ‘Playfair Display’, serif; font-size: 22px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 14px; }
+.progress-track { background: rgba(255,255,255,0.12); border-radius: 2px; height: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: #a8c97f; border-radius: 2px; transition: width 0.4s ease; }
+.progress-label { font-size: 12px; color: #a8c97f; margin-top: 6px; font-weight: 300; letter-spacing: 0.05em; }
+.sync-status { font-size: 11px; margin-top: 6px; color: rgba(232,223,200,0.5); letter-spacing: 0.04em; min-height: 16px; }
+
+.cat-list { padding: 16px 16px 0; }
+.cat-block { background: #fff; border-radius: 4px; margin-bottom: 10px; overflow: hidden; border: 1px solid #e0d8c8; }
+
+.cat-header { display: flex; align-items: center; padding: 14px 16px; cursor: pointer; background: #fff; user-select: none; gap: 10px; }
+.cat-header:hover { background: #faf7f0; }
+.cat-icon { color: #7a6a4a; font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+.cat-name { font-family: ‘Playfair Display’, serif; font-size: 16px; font-weight: 700; color: #2d3b2d; flex: 1; }
+.cat-count { font-size: 12px; color: #999; font-weight: 300; }
+.cat-count.done { color: #6a9a40; font-weight: 600; }
+.chevron { font-size: 10px; color: #bbb; transition: transform 0.2s; flex-shrink: 0; }
+.chevron.open { transform: rotate(180deg); }
+
+.cat-items { border-top: 1px solid #f0e8d8; }
+.item-row { display: flex; align-items: center; padding: 10px 16px; gap: 12px; border-bottom: 1px solid #f5f0e8; transition: background 0.15s; }
+.item-row:last-child { border-bottom: none; }
+.item-row:hover { background: #faf7f0; }
+.item-row.checked-row { background: #f7fbf2; }
+
+.check-btn { width: 20px; height: 20px; border-radius: 3px; border: 1.5px solid #c8b898; background: transparent; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; font-size: 11px; color: transparent; }
+.check-btn.checked { background: #6a9a40; border-color: #6a9a40; color: white; }
+
+.item-text { flex: 1; font-size: 14px; color: #3a3020; font-weight: 400; line-height: 1.4; transition: opacity 0.15s; }
+.item-text.done { color: #aaa; text-decoration: line-through; text-decoration-color: #c8b898; opacity: 0.7; }
+
+.del-btn { background: none; border: none; color: #d0c0a0; cursor: pointer; font-size: 14px; padding: 2px 4px; line-height: 1; flex-shrink: 0; transition: color 0.15s; }
+.del-btn:hover { color: #c0503a; }
+
+.add-row { padding: 10px 12px; background: #faf7f0; display: flex; gap: 8px; border-top: 1px solid #ede5d5; }
+.add-input { flex: 1; background: #fff; border: 1px solid #ddd; border-radius: 3px; padding: 7px 10px; font-size: 13px; font-family: ‘Source Sans 3’, sans-serif; color: #3a3020; outline: none; }
+.add-input:focus { border-color: #6a9a40; }
+.add-btn { background: #2d3b2d; color: #e8dfc8; border: none; border-radius: 3px; padding: 7px 14px; font-size: 13px; font-family: ‘Source Sans 3’, sans-serif; cursor: pointer; }
+.add-btn:hover { background: #3e5540; }
+
+.cat-footer { padding: 8px 16px 10px; background: #faf7f0; display: flex; justify-content: flex-end; border-top: 1px solid #ede5d5; }
+.reset-btn { font-size: 11px; background: none; border: none; color: #b0a080; cursor: pointer; text-decoration: underline; font-family: ‘Source Sans 3’, sans-serif; }
+.reset-btn:hover { color: #7a6a4a; }
+
+.empty-msg { padding: 12px 16px; font-size: 13px; color: #bbb; }
+
+#setup-banner { background: #fff8e8; border: 1px solid #e0c870; border-radius: 4px; margin: 16px; padding: 16px; font-size: 13px; color: #5a4a20; line-height: 1.6; }
+#setup-banner strong { font-weight: 600; }
+#setup-banner code { background: #f0e8c8; padding: 2px 6px; border-radius: 2px; font-family: monospace; font-size: 12px; user-select: all; }
+#setup-banner button { margin-top: 10px; background: #2d3b2d; color: #e8dfc8; border: none; border-radius: 3px; padding: 6px 14px; font-size: 12px; cursor: pointer; font-family: ‘Source Sans 3’, sans-serif; }
+</style>
+
+</head>
+<body>
+<div class="app-wrap">
+  <div class="header">
+    <h1>Paklijst camping</h1>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-label" id="progress-label">laden...</div>
+    <div class="sync-status" id="sync-status"></div>
+  </div>
+  <div id="setup-banner" style="display:none"></div>
+  <div class="cat-list" id="cat-list"></div>
+</div>
+
+<script>
+// ---- CONFIG ----
+const API_KEY = "$2a$10$Ova2lecMMsasElqlXg0gOeF.gyd1rEWkYQ5E6vsBvqDP/R9SVYZ6q";
+const BIN_ID_KEY = "camping-bin-id";
+const JSONBIN_BASE = "https://api.jsonbin.io/v3";
+
+const DEFAULT_DATA = {
+  categories: [
+    { id: "slapen", label: "Slapen", icon: "◎", items: [
+      { id: "s1", text: "Tent + haringen + hamer" },
+      { id: "s2", text: "Slaapzak" },
+      { id: "s3", text: "Slaapmat of luchtbed" },
+      { id: "s4", text: "Kussensloop" },
+      { id: "s5", text: "Hoofdlamp + batterijen" }
+    ]},
+    { id: "kleding", label: "Kleding", icon: "◈", items: [
+      { id: "k1", text: "Ondergoed" },
+      { id: "k2", text: "Sokken (incl. dikke)" },
+      { id: "k3", text: "T-shirts" },
+      { id: "k4", text: "Lange broek" },
+      { id: "k5", text: "Fleece of trui" },
+      { id: "k6", text: "Regenjas" },
+      { id: "k7", text: "Zwemkleding" },
+      { id: "k8", text: "Wandelschoenen" },
+      { id: "k9", text: "Slippers" },
+      { id: "k10", text: "Muts of pet" }
+    ]},
+    { id: "keuken", label: "Keuken", icon: "◇", items: [
+      { id: "ke1", text: "Campingkooksel" },
+      { id: "ke2", text: "Gaspatroon" },
+      { id: "ke3", text: "Pan + deksel" },
+      { id: "ke4", text: "Bestek" },
+      { id: "ke5", text: "Borden en bekers" },
+      { id: "ke6", text: "Kurketrekker" },
+      { id: "ke7", text: "Keukenmes + snijplank" },
+      { id: "ke8", text: "Vaatdoek en afwasmiddel" },
+      { id: "ke9", text: "Koelbox + koelelementen" },
+      { id: "ke10", text: "Koffiefilters / cafetière" }
+    ]},
+    { id: "hygiene", label: "Hygiëne", icon: "◉", items: [
+      { id: "h1", text: "Tandenborstel en -pasta" },
+      { id: "h2", text: "Shampoo en zeep" },
+      { id: "h3", text: "Handdoeken" },
+      { id: "h4", text: "Toiletpapier (reserve)" },
+      { id: "h5", text: "Zonnebrand" },
+      { id: "h6", text: "Insectenwerend middel" },
+      { id: "h7", text: "EHBO-kit" },
+      { id: "h8", text: "Medicijnen / paracetamol" }
+    ]},
+    { id: "kinderen", label: "Kinderen", icon: "◫", items: [
+      { id: "ki1", text: "Speelgoed / emmer en schep" },
+      { id: "ki2", text: "Kaartspel" },
+      { id: "ki3", text: "Boeken" },
+      { id: "ki4", text: "Zwembandjes" }
+    ]},
+    { id: "papieren", label: "Papieren", icon: "◰", items: [
+      { id: "a1", text: "ID-bewijzen" },
+      { id: "a2", text: "Zorgverzekeringspas" },
+      { id: "a3", text: "Campingreservering" },
+      { id: "a4", text: "Bankpas en contant geld" }
+    ]},
+    { id: "overig", label: "Overig", icon: "◭", items: [
+      { id: "o1", text: "Campingkaart of ACSI-kaart" },
+      { id: "o2", text: "Touw / waslijn en knijpers" },
+      { id: "o3", text: "Vuilniszakken" },
+      { id: "o4", text: "Aansteker of lucifers" },
+      { id: "o5", text: "Powerbank" }
+    ]}
+  ],
+  checked: {}
+};
+
+// ---- STATE ----
+let state = JSON.parse(JSON.stringify(DEFAULT_DATA));
+let openCat = "slapen";
+let binId = localStorage.getItem(BIN_ID_KEY) || null;
+let saveTimer = null;
+let newItemInputs = {};
+
+// ---- JSONBIN ----
+async function createBin() {
+  setStatus("Eerste keer opstarten, even wachten...");
+  const res = await fetch(`${JSONBIN_BASE}/b`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Master-Key": API_KEY,
+      "X-Bin-Name": "camping-paklijst",
+      "X-Bin-Private": "true"
+    },
+    body: JSON.stringify(state)
+  });
+  const data = await res.json();
+  binId = data.metadata.id;
+  localStorage.setItem(BIN_ID_KEY, binId);
+  showSetupBanner(binId);
+  setStatus("Gesynchroniseerd");
+}
+
+async function loadBin() {
+  const res = await fetch(`${JSONBIN_BASE}/b/${binId}/latest`, {
+    headers: { "X-Master-Key": API_KEY }
+  });
+  if (!res.ok) throw new Error("Laden mislukt");
+  const data = await res.json();
+  return data.record;
+}
+
+async function saveBin() {
+  const res = await fetch(`${JSONBIN_BASE}/b/${binId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Master-Key": API_KEY
+    },
+    body: JSON.stringify(state)
+  });
+  if (!res.ok) throw new Error("Opslaan mislukt");
+}
+
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  setStatus("opslaan...");
+  saveTimer = setTimeout(async () => {
+    try {
+      await saveBin();
+      setStatus("Gesynchroniseerd");
+    } catch {
+      setStatus("Sync mislukt, probeer opnieuw");
+    }
+  }, 800);
+}
+
+function setStatus(msg) {
+  document.getElementById("sync-status").textContent = msg;
+}
+
+// ---- SETUP BANNER ----
+function showSetupBanner(id) {
+  const banner = document.getElementById("setup-banner");
+  banner.style.display = "block";
+  banner.innerHTML = `
+    <strong>Gedeelde lijst aangemaakt.</strong><br>
+    Stuur je partner dit HTML-bestand. Diegene moet bij het openen dit ID invullen:<br><br>
+    <code id="bin-code">${id}</code><br><br>
+    Of open de app op een ander apparaat en voer het ID in wanneer daarom gevraagd wordt.
+    <br><button onclick="document.getElementById('setup-banner').style.display='none'">Sluiten</button>
+  `;
+}
+
+function askForBinId() {
+  const banner = document.getElementById("setup-banner");
+  banner.style.display = "block";
+  banner.innerHTML = `
+    <strong>Welkom.</strong><br>
+    Heb je een Bin ID ontvangen van degene die de lijst aanmaakte? Vul het hier in:<br><br>
+    <input id="bin-input" type="text" placeholder="bijv. 68..." style="width:100%;padding:6px 8px;font-size:13px;border:1px solid #ccc;border-radius:3px;margin-top:6px;">
+    <br><button id="bin-submit" style="margin-top:10px;background:#2d3b2d;color:#e8dfc8;border:none;border-radius:3px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:sans-serif;">Verbinden</button>
+    <br><br>
+    Geen ID? Dan maak je een nieuwe lijst aan.<br>
+    <button id="bin-new" style="margin-top:6px;background:#a08060;color:#fff;border:none;border-radius:3px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:sans-serif;">Nieuwe lijst starten</button>
+  `;
+  document.getElementById("bin-submit").addEventListener("click", async () => {
+    const val = document.getElementById("bin-input").value.trim();
+    if (!val) return;
+    binId = val;
+    localStorage.setItem(BIN_ID_KEY, binId);
+    banner.style.display = "none";
+    try {
+      setStatus("Verbinden...");
+      const loaded = await loadBin();
+      state = loaded;
+      render();
+      setStatus("Gesynchroniseerd");
+    } catch {
+      setStatus("ID niet gevonden, controleer en probeer opnieuw");
+    }
+  });
+  document.getElementById("bin-new").addEventListener("click", async () => {
+    banner.style.display = "none";
+    await createBin();
+    render();
+  });
+}
+
+// ---- RENDER ----
+function render() {
+  updateProgress();
+  const list = document.getElementById("cat-list");
+  list.innerHTML = "";
+
+  state.categories.forEach(cat => {
+    const catChecked = cat.items.filter(i => state.checked[i.id]).length;
+    const isOpen = openCat === cat.id;
+    const allDone = cat.items.length > 0 && catChecked === cat.items.length;
+
+    const block = document.createElement("div");
+    block.className = "cat-block";
+
+    // Header
+    const header = document.createElement("div");
+    header.className = "cat-header";
+    header.innerHTML = `
+      <span class="cat-icon">${cat.icon}</span>
+      <span class="cat-name">${cat.label}</span>
+      <span class="cat-count${allDone ? " done" : ""}">${catChecked}/${cat.items.length}</span>
+      <span class="chevron${isOpen ? " open" : ""}">&#9660;</span>
+    `;
+    header.addEventListener("click", () => {
+      openCat = isOpen ? null : cat.id;
+      render();
+    });
+    block.appendChild(header);
+
+    if (isOpen) {
+      // Items
+      const itemsWrap = document.createElement("div");
+      itemsWrap.className = "cat-items";
+
+      if (cat.items.length === 0) {
+        itemsWrap.innerHTML = `<div class="empty-msg">Geen items. Voeg er hieronder een toe.</div>`;
+      }
+
+      cat.items.forEach(item => {
+        const isDone = !!state.checked[item.id];
+        const row = document.createElement("div");
+        row.className = "item-row" + (isDone ? " checked-row" : "");
+        row.innerHTML = `
+          <button class="check-btn${isDone ? " checked" : ""}" aria-label="Afvinken">${isDone ? "&#10003;" : ""}</button>
+          <span class="item-text${isDone ? " done" : ""}">${item.text}</span>
+          <button class="del-btn" aria-label="Verwijder" title="Verwijder">&#215;</button>
+        `;
+        row.querySelector(".check-btn").addEventListener("click", () => {
+          state.checked[item.id] = !state.checked[item.id];
+          scheduleSave();
+          render();
+        });
+        row.querySelector(".del-btn").addEventListener("click", () => {
+          cat.items = cat.items.filter(i => i.id !== item.id);
+          delete state.checked[item.id];
+          scheduleSave();
+          render();
+        });
+        itemsWrap.appendChild(row);
+      });
+      block.appendChild(itemsWrap);
+
+      // Reset button
+      if (catChecked > 0) {
+        const footer = document.createElement("div");
+        footer.className = "cat-footer";
+        footer.innerHTML = `<button class="reset-btn">Vinkjes wissen</button>`;
+        footer.querySelector(".reset-btn").addEventListener("click", () => {
+          cat.items.forEach(i => delete state.checked[i.id]);
+          scheduleSave();
+          render();
+        });
+        block.appendChild(footer);
+      }
+
+      // Add row
+      const addRow = document.createElement("div");
+      addRow.className = "add-row";
+      const inputVal = newItemInputs[cat.id] || "";
+      addRow.innerHTML = `
+        <input class="add-input" type="text" placeholder="Item toevoegen..." value="${inputVal}">
+        <button class="add-btn">+</button>
+      `;
+      const inp = addRow.querySelector(".add-input");
+      inp.addEventListener("input", (e) => {
+        newItemInputs[cat.id] = e.target.value;
+      });
+      const doAdd = () => {
+        const text = (newItemInputs[cat.id] || "").trim();
+        if (!text) return;
+        cat.items.push({ id: "c-" + Date.now(), text });
+        newItemInputs[cat.id] = "";
+        scheduleSave();
+        render();
+      };
+      inp.addEventListener("keydown", (e) => { if (e.key === "Enter") doAdd(); });
+      addRow.querySelector(".add-btn").addEventListener("click", doAdd);
+      block.appendChild(addRow);
+
+      // Focus input after render if just opened
+      setTimeout(() => {
+        const activeInput = document.querySelector(".add-row .add-input");
+        if (activeInput && document.activeElement !== activeInput) {
+          // don't steal focus automatically, user can tap
+        }
+      }, 0);
+    }
+
+    list.appendChild(block);
+  });
+}
+
+function updateProgress() {
+  const all = state.categories.flatMap(c => c.items);
+  const done = all.filter(i => state.checked[i.id]).length;
+  const pct = all.length === 0 ? 0 : Math.round((done / all.length) * 100);
+  document.getElementById("progress-fill").style.width = pct + "%";
+  document.getElementById("progress-label").textContent = `${done} van ${all.length} ingepakt`;
+}
+
+// ---- INIT ----
+async function init() {
+  if (!binId) {
+    askForBinId();
+    render();
+    return;
+  }
+  try {
+    setStatus("Laden...");
+    const loaded = await loadBin();
+    state = loaded;
+    render();
+    setStatus("Gesynchroniseerd");
+  } catch {
+    setStatus("Kan niet verbinden, lokale versie");
+    render();
+  }
+}
+
+init();
+</script>
+
+</body>
+</html>
