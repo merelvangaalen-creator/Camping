@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
@@ -10,60 +9,59 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #f5f0e8; font-family: 'Source Sans 3', sans-serif; min-height: 100vh; padding-bottom: 80px; }
 
-.app-wrap { max-width: 480px; margin: 0 auto; }
+  .app-wrap { max-width: 480px; margin: 0 auto; }
 
-.header { background: #2d3b2d; color: #e8dfc8; padding: 28px 24px 20px; position: sticky; top: 0; z-index: 10; }
-.header h1 { font-family: ‘Playfair Display’, serif; font-size: 22px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 14px; }
-.progress-track { background: rgba(255,255,255,0.12); border-radius: 2px; height: 4px; overflow: hidden; }
-.progress-fill { height: 100%; background: #a8c97f; border-radius: 2px; transition: width 0.4s ease; }
-.progress-label { font-size: 12px; color: #a8c97f; margin-top: 6px; font-weight: 300; letter-spacing: 0.05em; }
-.sync-status { font-size: 11px; margin-top: 6px; color: rgba(232,223,200,0.5); letter-spacing: 0.04em; min-height: 16px; }
+  .header { background: #2d3b2d; color: #e8dfc8; padding: 28px 24px 20px; position: sticky; top: 0; z-index: 10; }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 14px; }
+  .progress-track { background: rgba(255,255,255,0.12); border-radius: 2px; height: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #a8c97f; border-radius: 2px; transition: width 0.4s ease; }
+  .progress-label { font-size: 12px; color: #a8c97f; margin-top: 6px; font-weight: 300; letter-spacing: 0.05em; }
+  .sync-status { font-size: 11px; margin-top: 6px; color: rgba(232,223,200,0.5); letter-spacing: 0.04em; min-height: 16px; }
 
-.cat-list { padding: 16px 16px 0; }
-.cat-block { background: #fff; border-radius: 4px; margin-bottom: 10px; overflow: hidden; border: 1px solid #e0d8c8; }
+  .cat-list { padding: 16px 16px 0; }
+  .cat-block { background: #fff; border-radius: 4px; margin-bottom: 10px; overflow: hidden; border: 1px solid #e0d8c8; }
 
-.cat-header { display: flex; align-items: center; padding: 14px 16px; cursor: pointer; background: #fff; user-select: none; gap: 10px; }
-.cat-header:hover { background: #faf7f0; }
-.cat-icon { color: #7a6a4a; font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
-.cat-name { font-family: ‘Playfair Display’, serif; font-size: 16px; font-weight: 700; color: #2d3b2d; flex: 1; }
-.cat-count { font-size: 12px; color: #999; font-weight: 300; }
-.cat-count.done { color: #6a9a40; font-weight: 600; }
-.chevron { font-size: 10px; color: #bbb; transition: transform 0.2s; flex-shrink: 0; }
-.chevron.open { transform: rotate(180deg); }
+  .cat-header { display: flex; align-items: center; padding: 14px 16px; cursor: pointer; background: #fff; user-select: none; gap: 10px; }
+  .cat-header:hover { background: #faf7f0; }
+  .cat-icon { color: #7a6a4a; font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+  .cat-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #2d3b2d; flex: 1; }
+  .cat-count { font-size: 12px; color: #999; font-weight: 300; }
+  .cat-count.done { color: #6a9a40; font-weight: 600; }
+  .chevron { font-size: 10px; color: #bbb; transition: transform 0.2s; flex-shrink: 0; }
+  .chevron.open { transform: rotate(180deg); }
 
-.cat-items { border-top: 1px solid #f0e8d8; }
-.item-row { display: flex; align-items: center; padding: 10px 16px; gap: 12px; border-bottom: 1px solid #f5f0e8; transition: background 0.15s; }
-.item-row:last-child { border-bottom: none; }
-.item-row:hover { background: #faf7f0; }
-.item-row.checked-row { background: #f7fbf2; }
+  .cat-items { border-top: 1px solid #f0e8d8; }
+  .item-row { display: flex; align-items: center; padding: 10px 16px; gap: 12px; border-bottom: 1px solid #f5f0e8; transition: background 0.15s; }
+  .item-row:last-child { border-bottom: none; }
+  .item-row:hover { background: #faf7f0; }
+  .item-row.checked-row { background: #f7fbf2; }
 
-.check-btn { width: 20px; height: 20px; border-radius: 3px; border: 1.5px solid #c8b898; background: transparent; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; font-size: 11px; color: transparent; }
-.check-btn.checked { background: #6a9a40; border-color: #6a9a40; color: white; }
+  .check-btn { width: 20px; height: 20px; border-radius: 3px; border: 1.5px solid #c8b898; background: transparent; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; font-size: 11px; color: transparent; }
+  .check-btn.checked { background: #6a9a40; border-color: #6a9a40; color: white; }
 
-.item-text { flex: 1; font-size: 14px; color: #3a3020; font-weight: 400; line-height: 1.4; transition: opacity 0.15s; }
-.item-text.done { color: #aaa; text-decoration: line-through; text-decoration-color: #c8b898; opacity: 0.7; }
+  .item-text { flex: 1; font-size: 14px; color: #3a3020; font-weight: 400; line-height: 1.4; transition: opacity 0.15s; }
+  .item-text.done { color: #aaa; text-decoration: line-through; text-decoration-color: #c8b898; opacity: 0.7; }
 
-.del-btn { background: none; border: none; color: #d0c0a0; cursor: pointer; font-size: 14px; padding: 2px 4px; line-height: 1; flex-shrink: 0; transition: color 0.15s; }
-.del-btn:hover { color: #c0503a; }
+  .del-btn { background: none; border: none; color: #d0c0a0; cursor: pointer; font-size: 14px; padding: 2px 4px; line-height: 1; flex-shrink: 0; transition: color 0.15s; }
+  .del-btn:hover { color: #c0503a; }
 
-.add-row { padding: 10px 12px; background: #faf7f0; display: flex; gap: 8px; border-top: 1px solid #ede5d5; }
-.add-input { flex: 1; background: #fff; border: 1px solid #ddd; border-radius: 3px; padding: 7px 10px; font-size: 13px; font-family: ‘Source Sans 3’, sans-serif; color: #3a3020; outline: none; }
-.add-input:focus { border-color: #6a9a40; }
-.add-btn { background: #2d3b2d; color: #e8dfc8; border: none; border-radius: 3px; padding: 7px 14px; font-size: 13px; font-family: ‘Source Sans 3’, sans-serif; cursor: pointer; }
-.add-btn:hover { background: #3e5540; }
+  .add-row { padding: 10px 12px; background: #faf7f0; display: flex; gap: 8px; border-top: 1px solid #ede5d5; }
+  .add-input { flex: 1; background: #fff; border: 1px solid #ddd; border-radius: 3px; padding: 7px 10px; font-size: 13px; font-family: 'Source Sans 3', sans-serif; color: #3a3020; outline: none; }
+  .add-input:focus { border-color: #6a9a40; }
+  .add-btn { background: #2d3b2d; color: #e8dfc8; border: none; border-radius: 3px; padding: 7px 14px; font-size: 13px; font-family: 'Source Sans 3', sans-serif; cursor: pointer; }
+  .add-btn:hover { background: #3e5540; }
 
-.cat-footer { padding: 8px 16px 10px; background: #faf7f0; display: flex; justify-content: flex-end; border-top: 1px solid #ede5d5; }
-.reset-btn { font-size: 11px; background: none; border: none; color: #b0a080; cursor: pointer; text-decoration: underline; font-family: ‘Source Sans 3’, sans-serif; }
-.reset-btn:hover { color: #7a6a4a; }
+  .cat-footer { padding: 8px 16px 10px; background: #faf7f0; display: flex; justify-content: flex-end; border-top: 1px solid #ede5d5; }
+  .reset-btn { font-size: 11px; background: none; border: none; color: #b0a080; cursor: pointer; text-decoration: underline; font-family: 'Source Sans 3', sans-serif; }
+  .reset-btn:hover { color: #7a6a4a; }
 
-.empty-msg { padding: 12px 16px; font-size: 13px; color: #bbb; }
+  .empty-msg { padding: 12px 16px; font-size: 13px; color: #bbb; }
 
-#setup-banner { background: #fff8e8; border: 1px solid #e0c870; border-radius: 4px; margin: 16px; padding: 16px; font-size: 13px; color: #5a4a20; line-height: 1.6; }
-#setup-banner strong { font-weight: 600; }
-#setup-banner code { background: #f0e8c8; padding: 2px 6px; border-radius: 2px; font-family: monospace; font-size: 12px; user-select: all; }
-#setup-banner button { margin-top: 10px; background: #2d3b2d; color: #e8dfc8; border: none; border-radius: 3px; padding: 6px 14px; font-size: 12px; cursor: pointer; font-family: ‘Source Sans 3’, sans-serif; }
+  #setup-banner { background: #fff8e8; border: 1px solid #e0c870; border-radius: 4px; margin: 16px; padding: 16px; font-size: 13px; color: #5a4a20; line-height: 1.6; }
+  #setup-banner strong { font-weight: 600; }
+  #setup-banner code { background: #f0e8c8; padding: 2px 6px; border-radius: 2px; font-family: monospace; font-size: 12px; user-select: all; }
+  #setup-banner button { margin-top: 10px; background: #2d3b2d; color: #e8dfc8; border: none; border-radius: 3px; padding: 6px 14px; font-size: 12px; cursor: pointer; font-family: 'Source Sans 3', sans-serif; }
 </style>
-
 </head>
 <body>
 <div class="app-wrap">
@@ -79,7 +77,7 @@
 
 <script>
 // ---- CONFIG ----
-const API_KEY = "$2a$10$Ova2lecMMsasElqlXg0gOeF.gyd1rEWkYQ5E6vsBvqDP/R9SVYZ6q";
+const API_KEY = "$2a$10$yFcaev.CuSySWcChDJLyw.CQiyNM2eWF6VtRU0Y/X9qtE1kzcviMy";
 const BIN_ID_KEY = "camping-bin-id";
 const JSONBIN_BASE = "https://api.jsonbin.io/v3";
 
@@ -403,6 +401,5 @@ async function init() {
 
 init();
 </script>
-
 </body>
 </html>
